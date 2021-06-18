@@ -8,14 +8,7 @@ int Core::refreshMousePosition()
 {
     // Get global mouse position in tiles
     _mousePos = sf::Mouse::getPosition(_screen) / TILE_SIZE;
-    if (_mousePos.x < 0
-        || _mousePos.y < 0
-        || _mousePos.x > _mapTilesWidth
-        || _mousePos.y > _mapTilesHeight
-    ) {
-        return false;
-    }
-    return true;
+    return isValidPos(_mousePos.x, _mousePos.y);
 }
 
 void Core::handleInputs()
@@ -36,8 +29,8 @@ void Core::handleInputs()
         return;
     // Tiles drawing
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-        setTileValue(_mousePos, true);
+        setTileValue(_mousePos.x, _mousePos.y, true);
     } else if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
-        setTileValue(_mousePos, false);
+        setTileValue(_mousePos.x, _mousePos.y, false);
     }
 }

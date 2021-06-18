@@ -20,14 +20,17 @@ class Core {
         void takeScreenshot();
         void initGrid();
         void initMap();
-        void setTileValue(sf::Vector2i pos, bool value);
+        void setTileValue(int xIdx, int yIdx, bool value);
+        void updateMap();
+        void updateColumn(int xIdx);
+        int getAliveNeighborsCount(int xIdx, int yIdx);
+        bool isValidPos(int xIdx, int yIdx);
 
     public:
         sf::RenderWindow _screen;
     private:
         // Grid
         std::vector<sf::VertexArray> _grid;
-        // In pixels
         int _mapTilesWidth;
         int _mapTilesHeight;
 
