@@ -11,7 +11,7 @@ Core::Core()
         "Game of Life",
         sf::Style::Titlebar | sf::Style::Close
     );
-    _screen.setFramerateLimit(30);
+    _screen.setFramerateLimit(120);
     _screen.setKeyRepeatEnabled(false);
     // Center the window on the screen
     auto desktop = sf::VideoMode::getDesktopMode();
@@ -43,9 +43,8 @@ void Core::updateMap()
         updateColumn(xIdx);
     // when all threads are done, switch _tmpMap and _map
     // As we rewrite every tile value, previous values do not matter
-    auto tmp = _map;
-    _map = _tmpMap;
-    _tmpMap = tmp;
+    for (int xIdx = 0 ; xIdx < MAP_WIDTH ; xIdx++)
+        _map[xIdx] = _tmpMap[xIdx];
 }
 
 void Core::updateColumn(int xIdx)
@@ -67,13 +66,9 @@ int Core::getAliveNeighborsCount(int xIdx, int yIdx)
     int count = 0;
     for (int tmpX = xIdx - 1 ; tmpX < xIdx + 2 ; tmpX++) {
         for (int tmpY = yIdx - 1 ; tmpY < yIdx + 2 ; tmpY++) {
-            if (!isValidPos(tmpX, tmpY) && _map[tmpX][tmpY])
+            if (isValidPos(tmpX, tmpY) && _map[tmpX][tmpY])
                 count++;
         }
-    }
-    if (count) {
-        std::cout << xIdx << "/" << yIdx << '\n';
-        std::cout << count << '\n';
     }
     return count;
 }

@@ -20,8 +20,9 @@ void Core::handleInputs()
             _screen.close();
     }
     // Handle keyboard events
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
         _is_paused = !_is_paused;
+    }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::F12))
         takeScreenshot();
     // Handle mouse events

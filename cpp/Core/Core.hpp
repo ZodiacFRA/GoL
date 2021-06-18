@@ -25,7 +25,7 @@ class Core {
         void updateColumn(int xIdx);
         int getAliveNeighborsCount(int xIdx, int yIdx);
         bool isValidPos(int xIdx, int yIdx);
-
+        void printMap();
     public:
         sf::RenderWindow _screen;
     private:
@@ -36,6 +36,7 @@ class Core {
 
         sf::Vector2i _mousePos;
         bool _is_paused;
+        double _last_pause_change;
 
         std::array<std::array<bool, MAP_HEIGHT>, MAP_WIDTH> _map;
         std::array<std::array<bool, MAP_HEIGHT>, MAP_WIDTH> _tmpMap;
