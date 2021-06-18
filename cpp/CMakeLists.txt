@@ -13,9 +13,6 @@ add_executable(GoL
         Core/Core.cpp
         Core/inputs.cpp
         Core/utils.cpp
-
-        utils/Chunk.hpp
-        utils/Chunk.cpp
 )
 
 find_package(Threads)

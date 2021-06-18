@@ -3,7 +3,7 @@
 
 
 int main() {
-    Core core = Core(MAP_WIDTH, MAP_HEIGHT, CHUNK_SIZE);
+    Core core = Core();
     while (core.run());
     core._screen.close();
     return 0;

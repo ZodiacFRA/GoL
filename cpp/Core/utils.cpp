@@ -32,3 +32,12 @@ void Core::initGrid()
         _grid.push_back(line);
     }
 }
+
+void Core::initMap()
+{
+    for (int xIdx = 0 ; xIdx < MAP_WIDTH ; xIdx++) {
+        for (int yIdx = 0 ; yIdx < MAP_HEIGHT ; yIdx++) {
+            _map[xIdx][yIdx] = false;
+        }
+    }
+}
