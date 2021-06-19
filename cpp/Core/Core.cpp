@@ -3,15 +3,15 @@
 
 
 Core::Core()
-    : _mapTilesWidth(MAP_WIDTH), _mapTilesHeight(MAP_HEIGHT), _is_paused(true),
-    _rect(sf::Vector2f(TILE_SIZE, TILE_SIZE))
+    : _mapTilesWidth(MAP_WIDTH), _mapTilesHeight(MAP_HEIGHT), _is_paused(false),
+    _rect(sf::Vector2f(TILE_SIZE, TILE_SIZE)), _perlin(RANDOM_SEED)
 {
     _screen.create(
         sf::VideoMode(_mapTilesWidth * TILE_SIZE, _mapTilesHeight * TILE_SIZE, 32),
         "Game of Life",
         sf::Style::Titlebar | sf::Style::Close
     );
-    _screen.setFramerateLimit(120);
+    _screen.setFramerateLimit(1000);
     _screen.setKeyRepeatEnabled(false);
     // Center the window on the screen
     auto desktop = sf::VideoMode::getDesktopMode();
@@ -25,26 +25,41 @@ Core::Core()
 
 int Core::run()
 {
+    int count = 0;
     while (_screen.isOpen()) {
         handleInputs();
-        if (!_is_paused)
+        if (!_is_paused) {
             updateMap();
+            count++;
+        }
         draw();
+        if (count == 100)
+            break;
     }
     return 0;
 }
 
 void Core::updateMap()
 {
+    int blockSize = 64;
+    std::vector<std::thread> tmp;
     // TODO: Multithread by column
     // _map will only be read
     // _tmpMap will only be written to
-    for (int xIdx = 0 ; xIdx < MAP_WIDTH ; xIdx++)
-        updateColumn(xIdx);
+    for (int xIdx = 0 ; xIdx < MAP_WIDTH ; xIdx += blockSize)
+        tmp.push_back(std::thread(&Core::updateColumnRange, this, xIdx, xIdx + blockSize));
+    for (int i = 0 ; i < tmp.size() ; i++)
+        tmp[i].join();
     // when all threads are done, switch _tmpMap and _map
     // As we rewrite every tile value, previous values do not matter
     for (int xIdx = 0 ; xIdx < MAP_WIDTH ; xIdx++)
         _map[xIdx] = _tmpMap[xIdx];
+}
+
+void Core::updateColumnRange(int xIdxStart, int xIdxEnd)
+{
+    for (int xIdx = xIdxStart ; xIdx < xIdxEnd ; xIdx++)
+        updateColumn(xIdx);
 }
 
 void Core::updateColumn(int xIdx)
@@ -80,7 +95,8 @@ bool Core::isValidPos(int xIdx, int yIdx)
     return true;
 }
 
-void Core::draw() {
+void Core::draw()
+{
     _screen.clear(sf::Color::Black);
     // Draw map
     for (int xIdx = 0 ; xIdx < MAP_WIDTH ; xIdx++) {

@@ -13,6 +13,8 @@ add_executable(GoL
         Core/Core.cpp
         Core/inputs.cpp
         Core/utils.cpp
+
+        Perlin/PerlinNoise.hpp
 )
 
 find_package(Threads)

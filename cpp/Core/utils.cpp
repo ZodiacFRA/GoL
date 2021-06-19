@@ -35,9 +35,20 @@ void Core::initGrid()
 
 void Core::initMap()
 {
+    static const double frequency = 10;
+    static const int octaves = 40;
+
     for (int xIdx = 0 ; xIdx < MAP_WIDTH ; xIdx++) {
         for (int yIdx = 0 ; yIdx < MAP_HEIGHT ; yIdx++) {
-            _map[xIdx][yIdx] = false;
+            auto noise = _perlin.accumulatedOctaveNoise2D_0_1(
+                xIdx / frequency,
+                yIdx / frequency,
+                octaves
+            );
+            if (noise > 0.5)
+                _map[xIdx][yIdx] = false;
+            else
+                _map[xIdx][yIdx] = true;
         }
     }
 }

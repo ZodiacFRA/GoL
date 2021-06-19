@@ -1,7 +1,9 @@
 #pragma once
 
-#define MAP_HEIGHT 128
-#define MAP_WIDTH 128
+#define RANDOM_SEED 0
+
+#define MAP_HEIGHT 256
+#define MAP_WIDTH 256
 
 // Only for the displayer
-#define TILE_SIZE 8
+#define TILE_SIZE 4
