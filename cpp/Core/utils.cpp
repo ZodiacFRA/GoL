@@ -18,17 +18,17 @@ void Core::initGrid()
     for (int xIdx = 0 ; xIdx < _mapTilesWidth ; xIdx++) {
         sf::VertexArray line(sf::LinesStrip, 2);
         line[0].position = sf::Vector2f(xIdx * TILE_SIZE, 0);
-        line[0].color  = sf::Color(50, 50, 50);
+        line[0].color  = sf::Color(25, 25, 25);
         line[1].position = sf::Vector2f(xIdx * TILE_SIZE, _mapTilesHeight * TILE_SIZE);
-        line[1].color  = sf::Color(50, 50, 50);
+        line[1].color  = sf::Color(25, 25, 25);
         _grid.push_back(line);
     }
     for (int yIdx = 0 ; yIdx < _mapTilesWidth ; yIdx++) {
         sf::VertexArray line(sf::LinesStrip, 2);
         line[0].position = sf::Vector2f(0, yIdx * TILE_SIZE);
-        line[0].color  = sf::Color(50, 50, 50);
+        line[0].color  = sf::Color(25, 25, 25);
         line[1].position = sf::Vector2f(_mapTilesWidth * TILE_SIZE, yIdx * TILE_SIZE);
-        line[1].color  = sf::Color(50, 50, 50);
+        line[1].color  = sf::Color(25, 25, 25);
         _grid.push_back(line);
     }
 }
@@ -45,10 +45,10 @@ void Core::initMap()
                 yIdx / frequency,
                 octaves
             );
-            if (noise > 0.5)
-                _map[xIdx][yIdx] = false;
-            else
+            if (noise > 0.9)
                 _map[xIdx][yIdx] = true;
+            else
+                _map[xIdx][yIdx] = false;
         }
     }
 }

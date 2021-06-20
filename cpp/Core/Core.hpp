@@ -11,7 +11,7 @@
 
 class Core {
     public:
-        Core ();
+        Core (std::vector<int> ruleBorn, std::vector<int> ruleSurvive);
         virtual ~Core () {};
 
         int run();
@@ -32,6 +32,9 @@ class Core {
     public:
         sf::RenderWindow _screen;
     private:
+        // Rules
+        std::vector<int> _ruleBorn;
+        std::vector<int> _ruleSurvive;
         // Display
         std::vector<sf::VertexArray> _grid;
         sf::RectangleShape _rect;

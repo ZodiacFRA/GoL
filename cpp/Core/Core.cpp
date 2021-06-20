@@ -2,8 +2,9 @@
 #include "../conf.hpp"
 
 
-Core::Core()
-    : _mapTilesWidth(MAP_WIDTH), _mapTilesHeight(MAP_HEIGHT), _is_paused(false),
+Core::Core(std::vector<int> ruleBorn, std::vector<int> ruleSurvive)
+    : _ruleBorn(ruleBorn), _ruleSurvive(ruleSurvive),
+    _mapTilesWidth(MAP_WIDTH), _mapTilesHeight(MAP_HEIGHT), _is_paused(true),
     _rect(sf::Vector2f(TILE_SIZE, TILE_SIZE)), _perlin(RANDOM_SEED)
 {
     _screen.create(
@@ -33,17 +34,18 @@ int Core::run()
             count++;
         }
         draw();
-        if (count == 100)
-            break;
+        // if (count == 25)
+        //     break;
     }
     return 0;
 }
 
 void Core::updateMap()
 {
-    int blockSize = 64;
+    int blockSize = MAP_WIDTH / 4;
     std::vector<std::thread> tmp;
-    // TODO: Multithread by column
+    // Multithread by column
+    // Give each thread {blockSize} columns to process
     // _map will only be read
     // _tmpMap will only be written to
     for (int xIdx = 0 ; xIdx < MAP_WIDTH ; xIdx += blockSize)
@@ -66,9 +68,9 @@ void Core::updateColumn(int xIdx)
 {
     for (int yIdx = 0 ; yIdx < MAP_HEIGHT ; yIdx++) {
         int aliveNeighborsCount = getAliveNeighborsCount(xIdx, yIdx);
-        if (aliveNeighborsCount == 3)  // Alive
+        if (std::count(_ruleBorn.begin(), _ruleBorn.end(), aliveNeighborsCount))
             _tmpMap[xIdx][yIdx] = true;
-        else if (aliveNeighborsCount == 4)  // Do nothing
+        else if (std::count(_ruleSurvive.begin(), _ruleSurvive.end(), aliveNeighborsCount))  // Do nothing
             _tmpMap[xIdx][yIdx] = _map[xIdx][yIdx];
         else  // Dead
             _tmpMap[xIdx][yIdx] = false;
